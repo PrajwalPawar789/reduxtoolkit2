@@ -1,13 +1,139 @@
-// JobTitleFilter.js
 import { Disclosure } from "@headlessui/react";
 import { XMarkIcon, PlusIcon, MinusIcon } from "@heroicons/react/20/solid";
 import filters from './filters';
+import * as XLSX from 'xlsx';
+import { useState } from "react";
 
-const JobTitleFilter = ({ selectedTitles, handleTitleSelection, handleTitleSearchChange, titleSearchTerm }) => {
+const JobTitleFilter = ({ selectedTitles, handleTitleSelection, handleTitleSelection1, handleTitleSelection3, handleTitleSelection4 , handleTitleSearchChange, titleSearchTerm }) => {
+  const [file, setFile] = useState(null);
+  const [file1, setFile1] = useState(null);
+  const [file3, setFile3] = useState(null);
+  const [file4, setFile4] = useState(null);
+
+
   const jobTitleFilter = filters.find((f) => f.id === "title");
   const filteredJobTitleOptions = jobTitleFilter.options.filter((option) =>
     option.label.toLowerCase().includes(titleSearchTerm)
   );
+
+  // Handle file input change
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      setFile(file);
+      parseExcel(file);
+    }
+  };
+
+  const handleFileChange1 = (event) => {
+    const file1 = event.target.files[0];
+    if (file1) {
+      setFile1(file1);
+      parseExcel1(file1);
+    }
+  };
+
+  const handleFileChange3 = (event) => {
+    const file3 = event.target.files[0];
+    if (file3) {
+      setFile3(file3);
+      parseExcel3(file3);
+    }
+  };
+
+  const handleFileChange4 = (event) => {
+    const file4 = event.target.files[0];
+    if (file4) {
+      setFile4(file4);
+      parseExcel4(file4);
+    }
+  };
+
+  // Parse the Excel file and update the job titles
+const parseExcel1 = (file1) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const ab = e.target.result;
+    const wb = XLSX.read(ab, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+    console.log("Excel Data:", data); // Debugging: log the raw data
+
+    // Extract all job titles from the first column
+    const titles = data.flat().map(row => row?.toString().trim()).filter(title => title);
+
+    console.log("Extracted Titles Excluding:", titles); // Debugging: log the extracted titles
+
+    // Update the state with new titles
+    handleTitleSelection1(titles); // Pass the array directly
+  };
+  reader.readAsArrayBuffer(file1);
+};
+
+const parseExcel3 = (file3) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const ab = e.target.result;
+    const wb = XLSX.read(ab, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+    console.log("Excel Data:", data); // Debugging: log the raw data
+
+    // Extract all job titles from the first column
+    const titles = data.flat().map(row => row?.toString().trim()).filter(title => title);
+
+    console.log("Extracted Titles Including fuzzy:", titles); // Debugging: log the extracted titles
+
+    // Update the state with new titles
+    handleTitleSelection3(titles); // Pass the array directly
+  };
+  reader.readAsArrayBuffer(file3);
+};
+
+const parseExcel4 = (file4) => {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const ab = e.target.result;
+    const wb = XLSX.read(ab, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+
+    console.log("Excel Data:", data); // Debugging: log the raw data
+
+    // Extract all job titles from the first column
+    const titles = data.flat().map(row => row?.toString().trim()).filter(title => title);
+
+    console.log("Extracted Titles Excluding Fuzzy:", titles); // Debugging: log the extracted titles
+
+    // Update the state with new titles
+    handleTitleSelection4(titles); // Pass the array directly
+  };
+  reader.readAsArrayBuffer(file4);
+};
+
+  // Parse the Excel file and update the job titles
+  const parseExcel = (file) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const ab = e.target.result;
+      const wb = XLSX.read(ab, { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
+  
+      console.log("Excel Data:", data); // Debugging: log the raw data
+  
+      // Extract all job titles from the first column
+      const titles = data.flat().map(row => row?.toString().trim()).filter(title => title);
+  
+      console.log("Extracted Titles:", titles); // Debugging: log the extracted titles
+  
+      // Update the state with new titles
+      handleTitleSelection(titles); // Pass the array directly
+    };
+    reader.readAsArrayBuffer(file);
+  };
 
   return (
     <Disclosure as="div" key="title" className="border-b border-gray-200 py-4">
@@ -46,6 +172,44 @@ const JobTitleFilter = ({ selectedTitles, handleTitleSelection, handleTitleSearc
                 className="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 onChange={handleTitleSearchChange}
                 value={titleSearchTerm}
+              />
+              
+            </div>
+            <span>Including Title</span>
+            <div className="pb-2">
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileChange}
+                className="mt-1 block w-full py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <span>Including Title Fuzzy Match</span>
+            <div className="pb-2">
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileChange3}
+                className="mt-1 block w-full py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <span>Excluding Title</span>
+
+            <div className="pb-2">
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileChange1}
+                className="mt-1 block w-full py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <span>Excluding Title Fuzzy Match</span>
+            <div className="pb-2">
+              <input
+                type="file"
+                accept=".xlsx, .xls"
+                onChange={handleFileChange4}
+                className="mt-1 block w-full py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               />
             </div>
             <div className="max-h-60 overflow-y-auto">

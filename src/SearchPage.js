@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import ProspectTable from "./ProspectTable";
 import Loader from "./Loader";
 import Contactandcompany from './contactandcompany';
-import IndustryFilter from './IndustryFilter'; // Import the new component
-import JobTitleFilter from './JobTitleFilter'; // Import the JobTitleFilter component
+import IndustryFilter from './IndustryFilter';
+import JobTitleFilter from './JobTitleFilter';
 import Navbar from "./Navbar";
-import CountryFilter from './CountryFilter'
+import CountryFilter from './CountryFilter';
+import JobLevelFilter from './JobLevelFilter';
+import JobFunctionFilter from './JobFunctionFilter'; 
+import EmployeeSizeFilter from './EmployeeSizeFilter'; 
+import CompanyNameFilter from "./CompanyNameFilter";
 
 export default function SearchPage() {
   const [selectedCountry, setSelectedCountry] = useState("");
@@ -14,13 +18,23 @@ export default function SearchPage() {
   const [selectedIndustries, setSelectedIndustries] = useState([]);
   const [totalCompanies, setTotalCompanies] = useState(0);
   const [selectedTitles, setSelectedTitles] = useState([]);
+  const [selectedTitles1, setSelectedTitles1] = useState([]);
+  const [selectedTitles3, setSelectedTitles3] = useState([]);
+  const [selectedTitles4, setSelectedTitles4] = useState([]);
+
+  const [selectedLevels, setSelectedLevels] = useState([]);
+  const [selectedFunctions, setSelectedFunctions] = useState([]);
   const [companyName, setCompanyName] = useState("");
   const [fetchedProspects, setFetchedProspects] = useState([]);
   const [totalContacts, setTotalContacts] = useState(0);
   const [industrySearchTerm, setIndustrySearchTerm] = useState("");
-  const [titleSearchTerm, setTitleSearchTerm] = useState(""); // Added state for title search term
+  const [titleSearchTerm, setTitleSearchTerm] = useState("");
+  const [functionSearchTerm, setFunctionSearchTerm] = useState(""); 
+  const [levelSearchTerm, setLevelSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [countrySearchTerm, setCountrySearchTerm] = useState(""); // Added state for country search term
+  const [countrySearchTerm, setCountrySearchTerm] = useState("");
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [sizeSearchTerm, setSizeSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchFilteredProspects = async () => {
@@ -33,6 +47,12 @@ export default function SearchPage() {
         body: JSON.stringify({
           selectedIndustries,
           selectedTitles,
+          selectedTitles1,
+          selectedTitles3,
+          selectedTitles4,
+          selectedLevels,
+          selectedFunctions,
+          selectedSizes,
           companyName,
           selectedCountry,
           selectedState,
@@ -59,7 +79,7 @@ export default function SearchPage() {
     };
 
     fetchFilteredProspects();
-  }, [selectedIndustries, selectedTitles, companyName, selectedCountry, selectedState, selectedCity]);
+  }, [selectedIndustries, selectedTitles, selectedTitles1, selectedTitles3, selectedTitles4 , selectedLevels, selectedFunctions, selectedSizes, companyName, selectedCountry, selectedState, selectedCity]);
 
   const handleIndustrySelection = (selectedOption) => {
     console.log("Selected industry:", selectedOption);
@@ -71,10 +91,88 @@ export default function SearchPage() {
   };
 
   const handleTitleSelection = (selectedOption) => {
-    console.log("Selected title:", selectedOption);
-    setSelectedTitles((prevSelected) =>
+    if (Array.isArray(selectedOption)) {
+        // If an array is passed (from Excel), replace the selected titles with the new ones
+        setSelectedTitles(selectedOption);
+    } else {
+        // If a single title is passed (from checkbox selection), toggle its selection
+        setSelectedTitles((prevSelected) =>
+            prevSelected.includes(selectedOption)
+                ? prevSelected.filter((title) => title !== selectedOption)
+                : [...prevSelected, selectedOption]
+        );
+    }
+  };
+
+  const handleTitleSelection1 = (selectedOption) => {
+    if (Array.isArray(selectedOption)) {
+        // If an array is passed (from Excel), replace the selected titles with the new ones
+        setSelectedTitles1(selectedOption);
+    } else {
+        // If a single title is passed (from checkbox selection), toggle its selection
+        setSelectedTitles1((prevSelected) =>
+            prevSelected.includes(selectedOption)
+                ? prevSelected.filter((title) => title !== selectedOption)
+                : [...prevSelected, selectedOption]
+        );
+    }
+  };
+
+  const handleTitleSelection3 = (selectedOption) => {
+    if (Array.isArray(selectedOption)) {
+        // If an array is passed (from Excel), replace the selected titles with the new ones
+        setSelectedTitles3(selectedOption);
+    } else {
+        // If a single title is passed (from checkbox selection), toggle its selection
+        setSelectedTitles3((prevSelected) =>
+            prevSelected.includes(selectedOption)
+                ? prevSelected.filter((title) => title !== selectedOption)
+                : [...prevSelected, selectedOption]
+        );
+    }
+  };
+
+  const handleTitleSelection4 = (selectedOption) => {
+    if (Array.isArray(selectedOption)) {
+        // If an array is passed (from Excel), replace the selected titles with the new ones
+        setSelectedTitles4(selectedOption);
+    } else {
+        // If a single title is passed (from checkbox selection), toggle its selection
+        setSelectedTitles4((prevSelected) =>
+            prevSelected.includes(selectedOption)
+                ? prevSelected.filter((title) => title !== selectedOption)
+                : [...prevSelected, selectedOption]
+        );
+    }
+  };
+
+  
+  const handleSizeSelection = (selectedOption) => {
+    setSelectedSizes((prevSelected) =>
       prevSelected.includes(selectedOption)
-        ? prevSelected.filter((title) => title !== selectedOption)
+        ? prevSelected.filter((size) => size !== selectedOption)
+        : [...prevSelected, selectedOption]
+    );
+  };
+  
+  const handleSizeSearchChange = (event) => {
+    setSizeSearchTerm(event.target.value.toLowerCase());
+  };
+
+  const handleFunctionSelection = (selectedOption) => {
+    console.log("Selected function:", selectedOption);
+    setSelectedFunctions((prevSelected) =>
+      prevSelected.includes(selectedOption)
+        ? prevSelected.filter((func) => func !== selectedOption)
+        : [...prevSelected, selectedOption]
+    );
+  };
+
+  const handleLevelSelection = (selectedOption) => {
+    console.log("Selected level:", selectedOption);
+    setSelectedLevels((prevSelected) =>
+      prevSelected.includes(selectedOption)
+        ? prevSelected.filter((level) => level !== selectedOption)
         : [...prevSelected, selectedOption]
     );
   };
@@ -93,11 +191,19 @@ export default function SearchPage() {
   };
 
   const handleTitleSearchChange = (event) => {
-    setTitleSearchTerm(event.target.value.toLowerCase()); // Handle title search change
+    setTitleSearchTerm(event.target.value.toLowerCase()); 
+  };
+
+  const handleFunctionSearchChange = (event) => {
+    setFunctionSearchTerm(event.target.value.toLowerCase()); // Handle function search change
+  };
+
+  const handleLevelSearchChange = (event) => {
+    setLevelSearchTerm(event.target.value.toLowerCase()); 
   };
 
   const handleCountrySearchChange = (event) => {
-    setCountrySearchTerm(event.target.value.toLowerCase()); // Handle country search change
+    setCountrySearchTerm(event.target.value.toLowerCase()); 
   };
 
   const handleCountryChange = (event) => {
@@ -135,43 +241,61 @@ export default function SearchPage() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
+                <h3 className="sr-only">Categories</h3>
+                
+                <CountryFilter 
+                  selectedCountry={selectedCountry}
+                  handleCountrySelection={handleCountrySelection}
+                  handleCountryChange={handleCountryChange}
+                  handleStateChange={handleStateChange}
+                  handleCityChange={handleCityChange}
+                  countrySearchTerm={countrySearchTerm}
+                  handleCountrySearchChange={handleCountrySearchChange}
+                />
                 <IndustryFilter
                   selectedIndustries={selectedIndustries}
                   handleIndustrySelection={handleIndustrySelection}
-                  handleIndustrySearchChange={handleIndustrySearchChange}
                   industrySearchTerm={industrySearchTerm}
+                  handleIndustrySearchChange={handleIndustrySearchChange}
                 />
                 <JobTitleFilter
                   selectedTitles={selectedTitles}
                   handleTitleSelection={handleTitleSelection}
-                  handleTitleSearchChange={handleTitleSearchChange}
+                  handleTitleSelection1={handleTitleSelection1}
+                  handleTitleSelection3={handleTitleSelection3}
+                  handleTitleSelection4={handleTitleSelection4}
                   titleSearchTerm={titleSearchTerm}
+                  handleTitleSearchChange={handleTitleSearchChange}
                 />
-                <CountryFilter
-                  selectedCountry={selectedCountry}
-                  handleCountrySelection={handleCountrySelection}
-                  handleCountrySearchChange={handleCountrySearchChange}
-                  countrySearchTerm={countrySearchTerm}
+                <JobFunctionFilter
+                  selectedFunctions={selectedFunctions}
+                  handleFunctionSelection={handleFunctionSelection}
+                  functionSearchTerm={functionSearchTerm}
+                  handleFunctionSearchChange={handleFunctionSearchChange}
                 />
-                <div className="pt-6">
-                  <label
-                    htmlFor="company-name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Company Name
-                  </label>
-                  <input
-                    type="text"
-                    name="companyName"
-                    id="company-name"
-                    className="mt-1 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholder="Search by company name"
-                    onChange={handleCompanyNameInput}
-                  />
-                </div>
+                <JobLevelFilter
+                  selectedLevels={selectedLevels} 
+                  handleLevelSelection={handleLevelSelection} 
+                  handleLevelSearchChange={handleLevelSearchChange}
+                  levelSearchTerm={levelSearchTerm} 
+                />
+                <EmployeeSizeFilter
+  selectedSizes={selectedSizes}
+  handleSizeSelection={handleSizeSelection}
+  sizeSearchTerm={sizeSearchTerm}
+  handleSizeSearchChange={handleSizeSearchChange}
+/>
+                <div >
+                {/* <input
+                  type="text"
+                  placeholder="Search by Company Name"
+                  className="mt-5 mb-6 block w-full pl-3 pr-10 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  onChange={handleCompanyNameInput}
+                /> */}
+                <CompanyNameFilter handleCompanyNameInput={handleCompanyNameInput} />
+              </div>
               </form>
-
-              {/* Prospect grid */}
+              
               <div className="lg:col-span-3">
                 {loading ? (
                   <Loader />

@@ -2,6 +2,22 @@
 
 const filters = [
     {
+    id: "employee",
+    name: "Employee",
+    options: 
+      [
+        { value: "0-1 employees", label: "0-1" },
+        { value: "2-10 employees", label: "2-10" },
+        { value: "11-50 employees", label: "11-50" },
+        { value: "51-200 employees", label: "51-200" },
+        { value: "201-500 employees", label: "201-500" },
+        { value: "501-1,000 employees", label: "501-1,000" },
+        { value: "1,001-5,000 employees", label: "1,001-5,000" },
+        { value: "5,001-10,000 employees", label: "5,001-10,000" },
+        { value: "10,001+ employees", label: "10,001+" }
+      ],
+    },
+    {
       id: "industry",
       name: "Industry",
       options: [
@@ -52,15 +68,7 @@ const filters = [
       id: "title",
       name: "Job Title",
       options: [
-        { value: "Deputy Director IT Projects Airport Operations", label: "Deputy Director IT Projects Airport Operations" },
-        { value: "Team Manager - IT Solution Architect", label: "Team Manager - IT Solution Architect" },
-        { value: "Deputy Director IT Enterprise Architecture", label: "Deputy Director IT Enterprise Architecture" },
-        { value: "IT Solutions Architect", label: "IT Solutions Architect" },
-        { value: "Chief Executive Officer", label: "Chief Executive Officer" },
-        { value: "Director, IT - Business Analysis", label: "Director, IT - Business Analysis" },
-        { value: "IT Service Desk Manager", label: "IT Service Desk Manager" },
-        { value: "Food & Agriculture", label: "Food & Agriculture" },
-        { value: "Software Engineer", label: "Software Engineer" },
+        
       ],
     },
     {
@@ -92,6 +100,43 @@ const filters = [
         // Add more cities as needed
       ],
     },
+    {
+      id: "level",
+      name: "Job Level",
+      options: [
+        // Cities could be dynamically loaded based on the selected state
+        { value: "Manager", label: "Manager" },
+        { value: "Board Memebers and Owners", label: "Board Memebers and Owners" },
+        { value: "Individual Contributor", label: "Individual Contributor" },
+        { value: "VP Level", label: "VP Level" },
+        { value: "Director", label: "Director" },
+        { value: "C Level", label: "C Level" },
+        { value: "Supervisor", label: "Supervisor" },
+
+      ],
+    },
+    {
+      id: "function",
+      name: "Job Function",
+      options: [
+        // Cities could be dynamically loaded based on the selected state
+        { value: "IT", label: "IT" },
+        { value: "Marketing", label: "Marketing" },
+        { value: "Medical And Health", label: "Medical And Health" },
+        { value: "Education and Library", label: "Education and Library" },
+        { value: "Finance", label: "Finance" },
+        { value: "Operations", label: "Operations" },
+        { value: "Engineering and R&D", label: "Engineering and R&D" },
+        { value: "Sales", label: "Sales" },
+        { value: "HR", label: "HR" },
+        { value: "Customer Service", label: "Customer Service" },
+        { value: "Legal", label: "Legal" },
+        { value: "Others", label: "Others" },
+
+        // Add more cities as needed
+      ],
+    },
+    
   ];
   
   export default filters;
